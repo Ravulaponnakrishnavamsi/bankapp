@@ -9,8 +9,8 @@ const cors       = require('cors');
 const morgan     = require('morgan');
 const rateLimit  = require('express-rate-limit');
 
-// Firebase Configuration
 const { db } = require('./config/firebase');
+const otpStore = new Map();
 
 const app  = express();
 const PORT = process.env.PORT || 5000;
@@ -135,15 +135,20 @@ app.post('/api/send-otp', otpLimiter, async (req, res, next) => {
     const expiresAt = Date.now() + 5 * 60 * 1000; // 5 minutes
 
     // Store in Firestore (or fallback if DB not init)
+    const otpData = {
+      otp,
+      expiresAt,
+      user: { firstName, lastName, email }
+    };
+
     if (db) {
-      await db.collection('otps').doc(email.toLowerCase()).set({
-        otp,
-        expiresAt,
-        user: { firstName, lastName, email }
-      });
+      await db.collection('otps').doc(email.toLowerCase()).set(otpData);
     } else {
-      console.warn('⚠️ No database connection. OTP not stored persistently.');
+      console.warn('⚠️ No database connection. OTP stored in local memory only.');
     }
+
+    // Always store in local map as well for redundancy/fallback
+    otpStore.set(email.toLowerCase(), otpData);
 
     await sendOTPEmail({ firstName, lastName, email }, otp);
     res.json({ success: true, message: 'OTP sent successfully.' });
@@ -154,9 +159,53 @@ app.post('/api/send-otp', otpLimiter, async (req, res, next) => {
 
 /* ──────────────────────────────────────────────
    API: POST /api/verify-otp
-  // OTP correct – clear it (one-time use)
-  otpStore.delete(email.toLowerCase());
-  return res.json({ success: true, message: 'OTP verified successfully.' });
+   ────────────────────────────────────────────── */
+
+app.post('/api/verify-otp', async (req, res, next) => {
+  try {
+    const { email, otp } = req.body;
+    if (!email || !otp) {
+      return res.status(400).json({ success: false, error: 'Email and OTP are required.' });
+    }
+
+    const normalizedEmail = email.toLowerCase();
+    let storedOtpData = null;
+
+    // 1. Try Firestore first
+    if (db) {
+      const doc = await db.collection('otps').doc(normalizedEmail).get();
+      if (doc.exists) {
+        storedOtpData = doc.data();
+      }
+    } 
+    
+    // 2. Try local store if not found in Firestore (or if DB is null)
+    if (!storedOtpData && otpStore.has(normalizedEmail)) {
+      storedOtpData = otpStore.get(normalizedEmail);
+    }
+
+    if (!storedOtpData) {
+      return res.status(400).json({ success: false, error: 'OTP not found or expired.' });
+    }
+
+    if (storedOtpData.otp !== otp) {
+      return res.status(400).json({ success: false, error: 'Invalid OTP.' });
+    }
+
+    if (Date.now() > storedOtpData.expiresAt) {
+      if (db) await db.collection('otps').doc(normalizedEmail).delete();
+      otpStore.delete(normalizedEmail);
+      return res.status(400).json({ success: false, error: 'OTP has expired.' });
+    }
+
+    // OTP correct – clear it (one-time use)
+    if (db) await db.collection('otps').doc(normalizedEmail).delete();
+    otpStore.delete(normalizedEmail);
+
+    return res.json({ success: true, message: 'OTP verified successfully.' });
+  } catch (err) {
+    next(err);
+  }
 });
 
 /* ──────────────────────────────────────────────
