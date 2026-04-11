@@ -14,16 +14,16 @@ const animateIn = el => { el.classList.remove('animate-in'); void el.offsetWidth
 
 /* ── Session storage (user info only – OTP lives on server) ── */
 const USER_KEY = 'bank_user';
-const AUTH_KEY = 'bank_authed';
+const TOKEN_KEY = 'bank_token';
 
 function setUser(u) { sessionStorage.setItem(USER_KEY, JSON.stringify(u)); }
 function getUser() {
   try { return JSON.parse(sessionStorage.getItem(USER_KEY)) || {}; }
   catch { return {}; }
 }
-function isAuthed() { return sessionStorage.getItem(AUTH_KEY) === '1'; }
-function setAuthed() { sessionStorage.setItem(AUTH_KEY, '1'); }
-function logout() { sessionStorage.clear(); window.location.href = 'index.html'; }
+function isAuthed() { return localStorage.getItem(TOKEN_KEY) !== null; }
+function setAuthed(token) { localStorage.setItem(TOKEN_KEY, token); }
+function logout() { sessionStorage.clear(); localStorage.removeItem(TOKEN_KEY); window.location.href = 'index.html'; }
 
 /* ── Toast notifications ── */
 function toast(msg, type = 'info', duration = 4500) {
@@ -203,7 +203,9 @@ function initSignup() {
           </div>`;
 
         submitBtn.textContent = '✓ Verified!';
-        setAuthed();
+        setAuthed(data.token); // Store JWT from server
+        if (data.user) setUser(data.user); // Update user info from server
+
         toast('Welcome! Redirecting to your dashboard…', 'success');
         setTimeout(() => { window.location.href = 'dashboard.html'; }, 1800);
 

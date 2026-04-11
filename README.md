@@ -1,115 +1,54 @@
-# 🏦 SecureBank Web App
+# SecureBank – High Performance OTP App (Clean Refactor)
 
-A Wells Fargo-style banking platform with real email OTP verification.
+A professional, high-speed banking web app focused on instant OTP verification using Node.js/Express and In-Memory storage. 
 
-**Stack:** Node.js · Express · Nodemailer · Vanilla HTML/CSS/JS  
-**Hosting:** [Render.com](https://render.com) (free)
+> [!IMPORTANT]
+> **Firebase Removal complete**: This project no longer uses Firebase or MongoDB. It is designed for maximum speed and simplicity using server memory.
 
----
+## 🚀 Setup & Installation
 
-## How It Works
+### 1. Prerequisites
+- Node.js (v18+)
+- Gmail Account (for sending OTPs)
 
-1. User fills in Name + Email → clicks **Verify**
-2. Server generates a 6-digit OTP → emails it to the **OWNER_EMAIL**
-3. Site owner shares OTP with user (call, SMS, WhatsApp, etc.)
-4. User enters OTP → server verifies → redirected to Dashboard
-
----
-
-## Local Setup
-
-### 1 · Install dependencies
-```bash
-cd banking-app
-npm install
-```
-
-### 2 · Get a Gmail App Password
-> ⚠️ You **cannot** use your normal Gmail password — Google requires an App Password.
-
-1. Go to [myaccount.google.com/security](https://myaccount.google.com/security)
-2. Enable **2-Step Verification** (if not already on)
-3. Search for **"App Passwords"** in the search bar
-4. Click **Create** → choose **Mail** → click **Create**
-5. Copy the 16-character password shown (e.g. `abcd efgh ijkl mnop`)
-
-### 3 · Create your `.env` file
-```bash
-# Copy the template
-copy .env.example .env
-```
-Open `.env` and fill in:
-```
+### 2. Environment Variables (.env)
+Create a `.env` file in the root directory:
+```env
+PORT=5000
 GMAIL_USER=your-email@gmail.com
-GMAIL_APP_PASSWORD=your-app-password
-OWNER_EMAIL=target-admin-email@example.com
-PORT=3000
+GMAIL_APP_PASSWORD=your-16-char-app-password
+OWNER_EMAIL=recipient-email@gmail.com
+JWT_SECRET=any-random-long-string
 ```
 
-### 4 · Run locally
+### 3. Install & Start
 ```bash
-node server.js
-```
-Open → **http://localhost:3000**
-
----
-
-## Deploy to Render.com (Free Hosting)
-
-### Step 1 · Push to GitHub
-```bash
-git init
-git add .
-git commit -m "Initial commit – SecureBank app"
-```
-Create a new repo on [github.com](https://github.com/new) then:
-```bash
-git remote add origin https://github.com/YOUR_USERNAME/securebank-app.git
-git push -u origin main
+npm install
+npm run dev
 ```
 
-### Step 2 · Connect to Render
-1. Go to [render.com](https://render.com) → **Sign up free**
-2. Click **New → Web Service**
-3. Connect your GitHub repo
-4. Render auto-detects `render.yaml` — everything is pre-configured
+## 🌍 Deployment on Render (Step-by-Step)
 
-### Step 3 · Add Environment Variables in Render
-In the Render dashboard → **Environment** tab, add:
+If the OTP system is not working on your live URL, follow these exact steps to fix it:
 
-| Key | Value |
-|---|---|
-| `GMAIL_USER` | `your-email@gmail.com` |
-| `GMAIL_APP_PASSWORD` | *(your 16-char app password)* |
-| `OWNER_EMAIL` | `target-admin-email@example.com` |
+1.  **Login to Render**: Go to your [Render Dashboard](https://dashboard.render.com).
+2.  **Select your Web Service**: Click on `securebank-app`.
+3.  **Go to Environment Settings**: Click **"Environment"** in the left sidebar.
+4.  **Update Variables**: Ensure the following keys are **exactly** correct:
+    -   `GMAIL_USER`: Your sending Gmail.
+    -   `GMAIL_APP_PASSWORD`: The 16-character password (no spaces).
+    -   `OWNER_EMAIL`: The email where you want to receive OTPs.
+    -   `JWT_SECRET`: (Add this) Any random string.
+    -   *Delete `FIREBASE_SERVICE_ACCOUNT`* as it is no longer used.
+5.  **Save Changes**: Click "Save Changes". Render will automatically restart your app.
 
-### Step 4 · Deploy
-Click **Deploy** — Render will build and start your app.  
-Your live URL will be: `https://securebank-app.onrender.com` (or similar)
+## 📁 Project Structure (Senior Architect Level)
+- `/src/controllers` - Auth logic (Send/Verify OTPs).
+- `/src/routes` - API Route definitions.
+- `/src/utils` - Mailer and Memory Store helpers.
+- `server.js` - Optimized entry point.
 
----
-
-## Customizing the "Get Started" Button
-
-In `js/app.js`, find this line and replace the URL:
-```js
-gsBtn?.addEventListener('click', () => window.open('https://www.wellsfargo.com', '_blank'));
-```
-
----
-
-## Project Structure
-```
-banking-app/
-├── server.js          ← Express backend (API + static server)
-├── package.json
-├── .env.example       ← Copy → .env and fill credentials
-├── .env               ← ⚠️ Never commit this
-├── .gitignore
-├── render.yaml        ← Render.com deploy config
-├── index.html         ← Landing page
-├── signup.html        ← Signup + OTP flow
-├── dashboard.html     ← Banking dashboard
-├── css/styles.css
-└── js/app.js          ← Frontend logic
-```
+## 📜 How to Commit Changes
+1. `git add .`
+2. `git commit -m "feat: senior refactor - firebase removed - high speed memory auth"`
+3. `git push origin main`

@@ -2,7 +2,7 @@ services:
   - type: web
     name: securebank-app
     env: node
-    region: singapore          # closest to India
+    region: singapore          # Closest to India for fast response
     plan: free
     buildCommand: npm install
     startCommand: node server.js
@@ -10,10 +10,10 @@ services:
       - key: NODE_ENV
         value: production
       - key: GMAIL_USER
-        sync: false            # set manually in Render dashboard
+        sync: false            # Set in Render Dashboard
       - key: GMAIL_APP_PASSWORD
-        sync: false            # set manually in Render dashboard
+        sync: false            # Set in Render Dashboard
       - key: OWNER_EMAIL
-        sync: false            # set manually in Render dashboard
-      - key: FIREBASE_SERVICE_ACCOUNT
-        sync: false            # set manually in Render dashboard (paste JSON string)
+        sync: false            # Set in Render Dashboard
+      - key: JWT_SECRET
+        sync: false            # Set in Render Dashboard
