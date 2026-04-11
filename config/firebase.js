@@ -10,22 +10,30 @@ function initFirebase() {
   try {
     const serviceAccountVar = process.env.FIREBASE_SERVICE_ACCOUNT;
     
-    if (!serviceAccountVar) {
-      console.warn('⚠️ FIREBASE_SERVICE_ACCOUNT not found. Falling back to in-memory (dev only).');
+    // Check if missing or a common placeholder string
+    if (!serviceAccountVar || serviceAccountVar.includes('paste_the_entire_json')) {
+      console.warn('⚠️ FIREBASE_SERVICE_ACCOUNT not set or invalid. Falling back to in-memory mode.');
       return null;
     }
 
-    // Parse the JSON string
-    const serviceAccount = JSON.parse(serviceAccountVar);
+    // Try to parse JSON but wrapped in a check
+    let serviceAccount;
+    try {
+      serviceAccount = JSON.parse(serviceAccountVar);
+    } catch (parseErr) {
+      console.error('❌ Failed to parse FIREBASE_SERVICE_ACCOUNT JSON:', parseErr.message);
+      return null;
+    }
 
     admin.initializeApp({
       credential: admin.credential.cert(serviceAccount)
     });
 
     console.log('✅ Firebase Admin initialized successfully.');
+    // Set a sync timeout on Firestore if possible (though Admin SDK is mostly async)
     return admin.firestore();
   } catch (error) {
-    console.error('❌ Failed to initialize Firebase:', error.message);
+    console.error('❌ Unexpected error during Firebase init:', error.message);
     return null;
   }
 }

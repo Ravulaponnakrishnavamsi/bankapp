@@ -48,6 +48,16 @@ function generateOTP() {
 }
 
 /* ──────────────────────────────────────────────
+   Helper: Wrap Async with Timeout
+   ────────────────────────────────────────────── */
+async function withTimeout(promise, ms = 5000, fallbackValue = null) {
+  return Promise.race([
+    promise,
+    new Promise(resolve => setTimeout(() => resolve(fallbackValue), ms))
+  ]);
+}
+
+/* ──────────────────────────────────────────────
    Nodemailer transporter (Gmail)
    ────────────────────────────────────────────── */
 const transporter = nodemailer.createTransport({
@@ -151,7 +161,17 @@ app.post('/api/send-otp', otpLimiter, async (req, res, next) => {
     };
 
     if (db) {
-      await db.collection('otps').doc(email.toLowerCase()).set(otpData);
+      console.log('📡 Attempting to save OTP to database...');
+      const dbSuccess = await withTimeout(
+        db.collection('otps').doc(email.toLowerCase()).set(otpData).then(() => true),
+        5000,
+        false
+      );
+      if (!dbSuccess) {
+        console.warn('⚠️ Database write timed out. OTP stored in local memory only.');
+      } else {
+        console.log('✅ OTP saved to database.');
+      }
     } else {
       console.warn('⚠️ No database connection. OTP stored in local memory only.');
     }
@@ -182,9 +202,17 @@ app.post('/api/verify-otp', async (req, res, next) => {
 
     // 1. Try Firestore first
     if (db) {
-      const doc = await db.collection('otps').doc(normalizedEmail).get();
-      if (doc.exists) {
+      console.log('📡 Attempting to fetch OTP from database...');
+      const doc = await withTimeout(
+        db.collection('otps').doc(normalizedEmail).get(),
+        5000,
+        null
+      );
+      if (doc && doc.exists) {
         storedOtpData = doc.data();
+        console.log('✅ OTP fetched from database.');
+      } else {
+        console.warn('⚠️ Database fetch timed out or not found. Checking local store...');
       }
     } 
     
