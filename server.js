@@ -58,6 +58,15 @@ const transporter = nodemailer.createTransport({
   },
 });
 
+// Verify connection on startup (optional but helpful for logs)
+transporter.verify((error, success) => {
+  if (error) {
+    console.error('❌ Nodemailer verification failed:', error.message);
+  } else {
+    console.log('📧 Nodemailer is ready to send emails');
+  }
+});
+
 /* ──────────────────────────────────────────────
    Helper: Send OTP email to site owner
    ────────────────────────────────────────────── */
@@ -218,6 +227,17 @@ app.get('/health', (req, res) => res.json({ status: 'ok', timestamp: new Date().
 ────────────────────────────────────────────── */
 app.get('*', (req, res) => {
   res.sendFile(path.join(__dirname, 'index.html'));
+});
+
+/* ──────────────────────────────────────────────
+   Error Handling Middleware
+   ────────────────────────────────────────────── */
+app.use((err, req, res, next) => {
+  console.error('💥 Server Error:', err);
+  res.status(500).json({
+    success: false,
+    error: err.message || 'An internal server error occurred.'
+  });
 });
 
 /* ──────────────────────────────────────────────

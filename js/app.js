@@ -103,7 +103,15 @@ function initSignup() {
         headers: { 'Content-Type': 'application/json' },
         body: JSON.stringify(user)
       });
-      const data = await res.json();
+      
+      let data;
+      const contentType = res.headers.get('content-type');
+      if (contentType && contentType.includes('application/json')) {
+        data = await res.json();
+      } else {
+        const text = await res.text();
+        throw new Error('Server returned an unexpected response format. Please check your environment variables on Render.');
+      }
 
       if (!res.ok || !data.success) throw new Error(data.error || 'Server error');
 
