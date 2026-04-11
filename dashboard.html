@@ -1,0 +1,268 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8"/>
+  <meta name="viewport" content="width=device-width, initial-scale=1.0"/>
+  <title>SecureBank – My Dashboard</title>
+  <meta name="description" content="SecureBank online banking dashboard – manage your accounts, view balances, and more."/>
+  <link rel="stylesheet" href="css/styles.css"/>
+</head>
+<body data-page="dashboard">
+<div class="dashboard-page">
+
+  <!-- ===== TOP NAVBAR ===== -->
+  <nav class="dash-navbar">
+    <!-- Logo -->
+    <a href="index.html" class="nav-logo dash-logo">
+      <div class="logo-badge">
+        <svg viewBox="0 0 24 24" fill="none" xmlns="http://www.w3.org/2000/svg">
+          <path d="M3 9l9-7 9 7v11a2 2 0 01-2 2H5a2 2 0 01-2-2z" fill="#C8102E"/>
+          <polyline points="9 22 9 12 15 12 15 22" fill="white"/>
+        </svg>
+      </div>
+      <span class="logo-text" style="color:#fff;">Secure<span>Bank</span></span>
+    </a>
+
+    <!-- Main nav links -->
+    <ul class="dash-nav-links">
+      <li><a href="#" class="active">Personal</a></li>
+      <li><a href="#">Investing &amp; Wealth</a></li>
+      <li><a href="#">Business</a></li>
+      <li><a href="#">Commercial Banking</a></li>
+      <li><a href="#">About Us</a></li>
+    </ul>
+
+    <!-- Right side -->
+    <div class="dash-nav-right">
+      <a href="#">ATMs</a>
+      <a href="#">Help</a>
+      <span id="user-name" style="color:rgba(255,255,255,.85); font-size:13px; font-weight:600;"></span>
+      <button class="dash-signout signout-btn">Sign Out</button>
+    </div>
+  </nav>
+
+  <!-- ===== SUB NAV ===== -->
+  <nav class="dash-subnav">
+    <a href="#" class="active">Checking</a>
+    <a href="#">Savings &amp; CDs</a>
+    <a href="#">Credit Cards</a>
+    <a href="#">Home Loans</a>
+    <a href="#">Personal Loans</a>
+    <a href="#">Auto Loans</a>
+    <a href="#">Premier</a>
+    <a href="#">Education &amp; Tools</a>
+  </nav>
+
+  <!-- ===== WELCOME BAR ===== -->
+  <div class="dash-welcome">
+    <div>
+      <h2 id="dash-greet">Good morning</h2>
+      <p>Sign on to manage your accounts.</p>
+    </div>
+    <div style="display:flex; align-items:center; gap:12px;">
+      <span style="font-size:12px; color:#9E9E9E;">Last login: Today, <span id="login-time"></span></span>
+      <div style="width:8px; height:8px; background:#4CAF50; border-radius:50; box-shadow:0 0 6px #4CAF50;"></div>
+    </div>
+  </div>
+
+  <!-- ===== MAIN LAYOUT ===== -->
+  <main class="dash-main">
+
+    <!-- ============================
+         LEFT PANEL
+         ============================ -->
+    <aside class="dash-left">
+
+      <!-- Login widget (mirrors Wells Fargo style) -->
+      <div class="login-panel">
+        <h3 id="login-greet">Good morning</h3>
+        <p class="login-sub">You are signed in securely.</p>
+
+        <div style="background:#E8F5E9; border-radius:8px; padding:12px 14px; display:flex; align-items:center; gap:10px; margin-bottom:16px;">
+          <span style="font-size:20px;">✅</span>
+          <div>
+            <div style="font-size:13px; font-weight:700; color:#2E7D32;">Account Verified</div>
+            <div style="font-size:11px; color:#4CAF50;" id="user-email-display">—</div>
+          </div>
+        </div>
+
+        <a href="#" class="btn btn-primary" style="width:100%; justify-content:center;" onclick="return false;">
+          View My Accounts
+        </a>
+        <a href="index.html" class="enroll-link signout-btn" style="cursor:pointer;">Sign Out</a>
+        <a href="#" class="passkey-link">Sign on with a passkey</a>
+      </div>
+
+      <!-- Account cards -->
+      <div class="account-cards">
+        <div class="account-card">
+          <div class="acc-icon" style="background:#FEE8EB;">💳</div>
+          <div class="acc-info">
+            <h4>Everyday Checking</h4>
+            <p>••••4821</p>
+          </div>
+          <div class="acc-amount">$4,271.50</div>
+        </div>
+        <div class="account-card">
+          <div class="acc-icon" style="background:#E8F5E9;">🏦</div>
+          <div class="acc-info">
+            <h4>Way2Save® Savings</h4>
+            <p>••••9204</p>
+          </div>
+          <div class="acc-amount">$12,840.00</div>
+        </div>
+        <div class="account-card">
+          <div class="acc-icon" style="background:#EDE7F6;">💎</div>
+          <div class="acc-info">
+            <h4>Platinum Card</h4>
+            <p>••••3317</p>
+          </div>
+          <div class="acc-amount" style="color:#C8102E;">-$842.30</div>
+        </div>
+        <div class="account-card">
+          <div class="acc-icon" style="background:#FFF8E1;">🏠</div>
+          <div class="acc-info">
+            <h4>Home Equity Loan</h4>
+            <p>••••7710</p>
+          </div>
+          <div class="acc-amount" style="color:#9E9E9E;">$186k</div>
+        </div>
+      </div>
+
+    </aside>
+
+    <!-- ============================
+         RIGHT PANEL
+         ============================ -->
+    <section class="dash-right">
+
+      <!-- Promotional Banner (matches reference image) -->
+      <div class="promo-banner">
+        <div class="promo-content">
+          <div style="font-size:11px; font-weight:700; text-transform:uppercase; letter-spacing:1px; color:#9E9E9E; margin-bottom:8px;">Limited Time Offer</div>
+          <h2>$325 checking bonus on us</h2>
+          <p>New customers open an eligible checking account with qualifying direct deposits.</p>
+          <!-- GET STARTED BUTTON → external link -->
+          <button class="btn btn-outline" id="get-started-btn" style="display:inline-flex; align-items:center; gap:6px;">
+            Get started &raquo;
+          </button>
+        </div>
+        <div class="promo-aside">
+          <span class="promo-enjoy">Enjoy</span>
+          <span class="promo-big">$325</span>
+          <span class="promo-fine">Terms &amp; conditions apply</span>
+        </div>
+      </div>
+
+      <!-- Quick Actions -->
+      <div class="quick-actions">
+        <div class="qa-card">
+          <div class="qa-icon" style="background:#FEE8EB;">💸</div>
+          <h4>Transfer Money</h4>
+        </div>
+        <div class="qa-card">
+          <div class="qa-icon" style="background:#E3F2FD;">📄</div>
+          <h4>Pay Bills</h4>
+        </div>
+        <div class="qa-card">
+          <div class="qa-icon" style="background:#E8F5E9;">📱</div>
+          <h4>Mobile Deposit</h4>
+        </div>
+        <div class="qa-card">
+          <div class="qa-icon" style="background:#FFF8E1;">🗺️</div>
+          <h4>Find ATM</h4>
+        </div>
+      </div>
+
+      <!-- Product Cards -->
+      <div class="product-section">
+        <h3>
+          <span style="width:4px;height:18px;background:#C8102E;border-radius:2px;display:inline-block;"></span>
+          Featured Products
+        </h3>
+        <div class="product-cards">
+
+          <div class="product-card">
+            <div class="pc-header">
+              <div class="pc-icon" style="background:#FEE8EB;">🏦</div>
+              <h4>Checking Accounts</h4>
+            </div>
+            <p>Earn $325 when you open a new Everyday Checking account with qualifying direct deposits.</p>
+            <a href="#" class="link">Open account →</a>
+          </div>
+
+          <div class="product-card">
+            <div class="pc-header">
+              <div class="pc-icon" style="background:#E8F5E9;">💰</div>
+              <h4>Savings &amp; CDs</h4>
+            </div>
+            <p>Grow your money with high-yield savings accounts and competitive CD rates up to 5.15% APY.</p>
+            <a href="#" class="link">View rates →</a>
+          </div>
+
+          <div class="product-card">
+            <div class="pc-header">
+              <div class="pc-icon" style="background:#EDE7F6;">💳</div>
+              <h4>Credit Cards</h4>
+            </div>
+            <p>Earn unlimited 2% cash back, travel rewards, or 0% intro APR offers on new purchases.</p>
+            <a href="#" class="link">Compare cards →</a>
+          </div>
+
+          <div class="product-card">
+            <div class="pc-header">
+              <div class="pc-icon" style="background:#E3F2FD;">🏠</div>
+              <h4>Home &amp; Auto Loans</h4>
+            </div>
+            <p>Competitive rates on mortgages, home equity loans, and auto financing tailored to your needs.</p>
+            <a href="#" class="link">Get a quote →</a>
+          </div>
+
+        </div>
+      </div>
+
+      <!-- Security notice -->
+      <div style="background:#fff; border-radius:8px; padding:18px 22px; border:1px solid #E0E0E0; display:flex; align-items:center; gap:16px; box-shadow:0 1px 4px rgba(0,0,0,.08);">
+        <span style="font-size:28px;">🔒</span>
+        <div>
+          <div style="font-size:14px; font-weight:700; margin-bottom:4px;">Your account is protected</div>
+          <div style="font-size:12px; color:#9E9E9E;">256-bit SSL encryption · FDIC insured · 24/7 fraud monitoring</div>
+        </div>
+        <div style="margin-left:auto; font-size:12px; color:#C8102E; font-weight:600; cursor:pointer; white-space:nowrap;">View Security Center →</div>
+      </div>
+
+    </section>
+
+  </main>
+
+  <!-- ===== FOOTER ===== -->
+  <footer class="dash-footer">
+    <span>© 2026 SecureBank, N.A. Member FDIC. Equal Housing Lender.</span>
+    <div style="display:flex; gap:16px; flex-wrap:wrap;">
+      <a href="#">Privacy Policy</a>
+      <a href="#">Terms of Use</a>
+      <a href="#">Accessibility</a>
+      <a href="#">Site Map</a>
+    </div>
+  </footer>
+
+</div>
+
+<script src="js/app.js"></script>
+<script>
+  // Set login time
+  const lt = document.getElementById('login-time');
+  if (lt) lt.textContent = new Date().toLocaleTimeString([], {hour:'2-digit', minute:'2-digit'});
+
+  // Mirror greeting
+  const lg = document.getElementById('login-greet');
+  const dg = document.getElementById('dash-greet');
+  if (lg && dg) lg.textContent = dg.textContent;
+
+  // Show user email
+  const user = JSON.parse(sessionStorage.getItem('bank_user') || '{}');
+  const ed = document.getElementById('user-email-display');
+  if (ed && user.email) ed.textContent = user.email;
+</script>
+</body>
+</html>

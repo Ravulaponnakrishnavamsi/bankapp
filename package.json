@@ -1,0 +1,27 @@
+{
+  "name": "securebank-app",
+  "version": "1.0.0",
+  "description": "SecureBank – Wells Fargo-style banking web app with OTP email verification",
+  "main": "server.js",
+  "scripts": {
+    "start": "node server.js",
+    "dev": "nodemon server.js"
+  },
+  "dependencies": {
+    "compression": "^1.8.1",
+    "cors": "^2.8.6",
+    "dotenv": "^16.4.5",
+    "express": "^4.19.2",
+    "express-rate-limit": "^8.3.2",
+    "firebase-admin": "^13.8.0",
+    "helmet": "^8.1.0",
+    "morgan": "^1.10.1",
+    "nodemailer": "^6.9.13"
+  },
+  "devDependencies": {
+    "nodemon": "^3.1.0"
+  },
+  "engines": {
+    "node": ">=18.0.0"
+  }
+}

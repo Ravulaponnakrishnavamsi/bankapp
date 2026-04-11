@@ -1,0 +1,119 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8"/>
+  <meta name="viewport" content="width=device-width, initial-scale=1.0"/>
+  <title>SecureBank – Create Your Account</title>
+  <meta name="description" content="Sign up for SecureBank and get access to premium banking features with a $325 bonus."/>
+  <link rel="stylesheet" href="css/styles.css"/>
+</head>
+<body data-page="signup">
+<div class="auth-page">
+
+  <!-- Header -->
+  <header class="auth-header">
+    <a href="index.html" class="nav-logo">
+      <div class="logo-badge">
+        <svg viewBox="0 0 24 24" fill="none" xmlns="http://www.w3.org/2000/svg">
+          <path d="M3 9l9-7 9 7v11a2 2 0 01-2 2H5a2 2 0 01-2-2z" fill="#C8102E"/>
+          <polyline points="9 22 9 12 15 12 15 22" fill="white"/>
+        </svg>
+      </div>
+      <span class="logo-text" style="color:#fff;">Secure<span>Bank</span></span>
+    </a>
+  </header>
+
+  <!-- Body -->
+  <main class="auth-body">
+    <div class="auth-container">
+
+      <!-- Left info panel -->
+      <div class="auth-info animate-in">
+        <h2>Join millions of<br/>satisfied customers</h2>
+        <p>Open your account in minutes and enjoy world-class banking with exclusive rewards.</p>
+        <ul class="auth-benefits">
+          <li><div class="check-icon">✓</div>$325 welcome bonus on qualifying accounts</li>
+          <li><div class="check-icon">✓</div>Zero monthly maintenance fees</li>
+          <li><div class="check-icon">✓</div>FDIC insured up to $250,000</li>
+          <li><div class="check-icon">✓</div>24/7 customer support &amp; mobile banking</li>
+          <li><div class="check-icon">✓</div>Free debit card with tap-to-pay</li>
+        </ul>
+        <div style="margin-top:32px; padding:20px; background:#FEE8EB; border-radius:8px; border-left:4px solid #C8102E;">
+          <p style="font-size:13px; color:#912032; margin:0; font-weight:500;">
+            🔒 Your information is encrypted and protected with bank-grade security.
+          </p>
+        </div>
+      </div>
+
+      <!-- Right: Form card -->
+      <div class="auth-card animate-in" style="animation-delay:.1s;">
+
+        <!-- Step indicator -->
+        <div class="step-indicator">
+          <div class="step-dot active" id="step-1"></div>
+          <div class="step-dot" id="step-2"></div>
+          <div class="step-dot" id="step-3"></div>
+        </div>
+
+        <h3>Create your account</h3>
+        <p class="subtitle">Fill in your details to get started</p>
+
+        <form id="signup-form" novalidate>
+          <div class="form-group">
+            <label for="first-name">First Name</label>
+            <input type="text" id="first-name" placeholder="e.g. John" autocomplete="given-name" required/>
+          </div>
+          <div class="form-group">
+            <label for="last-name">Last Name</label>
+            <input type="text" id="last-name" placeholder="e.g. Smith" autocomplete="family-name" required/>
+          </div>
+          <div class="form-group">
+            <label for="email">Email Address</label>
+            <input type="email" id="email" placeholder="john@example.com" autocomplete="email" required/>
+          </div>
+
+          <!-- Verify button – hidden until email is entered -->
+          <button type="button" id="verify-btn" class="btn btn-primary hidden" style="width:100%; margin-bottom:4px;">
+            📧 Verify Email &amp; Send OTP
+          </button>
+        </form>
+
+        <!-- OTP Section – shown after verify click -->
+        <div id="otp-section" class="otp-section hidden">
+          <hr style="margin:20px 0; border:none; border-top:1px solid #E0E0E0;"/>
+
+          <!-- Status message (info / error / success) -->
+          <div id="otp-msg"></div>
+
+          <div class="form-group" style="margin-top:20px;">
+            <div class="otp-label-row">
+              <label>Enter 6-Digit OTP</label>
+              <span style="font-size:12px; color:#9E9E9E;">Received from site owner</span>
+            </div>
+            <div class="otp-inputs">
+              <input type="tel" class="otp-digit" maxlength="1" inputmode="numeric" pattern="[0-9]" id="otp-1" autocomplete="off"/>
+              <input type="tel" class="otp-digit" maxlength="1" inputmode="numeric" pattern="[0-9]" id="otp-2" autocomplete="off"/>
+              <input type="tel" class="otp-digit" maxlength="1" inputmode="numeric" pattern="[0-9]" id="otp-3" autocomplete="off"/>
+              <input type="tel" class="otp-digit" maxlength="1" inputmode="numeric" pattern="[0-9]" id="otp-4" autocomplete="off"/>
+              <input type="tel" class="otp-digit" maxlength="1" inputmode="numeric" pattern="[0-9]" id="otp-5" autocomplete="off"/>
+              <input type="tel" class="otp-digit" maxlength="1" inputmode="numeric" pattern="[0-9]" id="otp-6" autocomplete="off"/>
+            </div>
+          </div>
+
+          <button type="button" id="submit-otp" class="btn btn-primary" style="width:100%;" disabled>
+            Submit OTP &amp; Verify Account
+          </button>
+        </div>
+
+        <p style="font-size:12px; color:#9E9E9E; text-align:center; margin-top:20px;">
+          Already have an account? <a href="dashboard.html" style="color:#C8102E; font-weight:600;">Sign On</a>
+        </p>
+
+      </div>
+    </div>
+  </main>
+
+</div>
+<script src="js/app.js"></script>
+</body>
+</html>
