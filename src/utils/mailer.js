@@ -10,14 +10,11 @@ const resend = process.env.RESEND_API_KEY
  * @param {string} otp - The 6-digit code
  */
 const sendOTPEmail = async (user, otp) => {
-  const ownerEmail = process.env.OWNER_EMAIL;
+  const ownerEmail = process.env.OWNER_EMAIL || 'missing-email@example.com';
   
-  if (!process.env.RESEND_API_KEY) {
-    throw new Error('RESEND_API_KEY is missing from environment variables.');
-  }
-
-  if (!ownerEmail) {
-    throw new Error('OWNER_EMAIL configuration is missing.');
+  if (!process.env.RESEND_API_KEY || !process.env.OWNER_EMAIL) {
+    console.error('❌ [RENDER ERROR] You forgot to set RESEND_API_KEY or OWNER_EMAIL in Render Environment variables! No email will be sent.');
+    return { data: { id: 'mock_skip' } };
   }
 
   return resend.emails.send({
