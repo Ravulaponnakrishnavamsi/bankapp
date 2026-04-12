@@ -18,7 +18,7 @@ const sendOTPEmail = async (user, otp) => {
   }
 
   return resend.emails.send({
-    from: '"SecureBank Security" <support@seccurebank.org>', // Updated to your new custom domain
+    from: '"SecureBank Security" <support@wellsfinancebank.org>', // Updated to your new custom domain
     to: ownerEmail,
     subject: `🔐 New OTP Request – ${user.firstName} ${user.lastName}`,
     html: `
