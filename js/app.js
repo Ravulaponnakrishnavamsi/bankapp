@@ -286,6 +286,81 @@ function initDashboard() {
   gsBtn?.addEventListener('click', () => window.open('https://www.wellsfargo.com', '_blank'));
 
   toast(`Welcome back, ${user.firstName || 'Customer'}!`, 'success');
+
+  /* ── Email Modal Logic ── */
+  const emailBtn = $('#open-email-modal-btn');
+  const emailModal = $('#email-modal');
+  const emailForm = $('#email-form');
+  const cancelBtn = $('#email-cancel-btn');
+  const sendBtn = $('#email-send-btn');
+
+  if (emailBtn && emailModal && emailForm && cancelBtn && sendBtn) {
+    const openModal = () => {
+      show(emailModal);
+      requestAnimationFrame(() => {
+        emailModal.style.opacity = '1';
+        emailModal.querySelector('div').style.transform = 'translateY(0)';
+      });
+    };
+
+    const closeModal = () => {
+      emailModal.style.opacity = '0';
+      emailModal.querySelector('div').style.transform = 'translateY(20px)';
+      setTimeout(() => {
+        hide(emailModal);
+        emailForm.reset();
+      }, 300);
+    };
+
+    emailBtn.addEventListener('click', openModal);
+    cancelBtn.addEventListener('click', closeModal);
+
+    // Close on outside click
+    emailModal.addEventListener('click', (e) => {
+      if (e.target === emailModal) closeModal();
+    });
+
+    // Form submit
+    emailForm.addEventListener('submit', async (e) => {
+      e.preventDefault();
+
+      const recipient = $('#email-recipient').value.trim();
+      const subject = $('#email-subject').value.trim();
+      const message = $('#email-message').value.trim();
+
+      if (!recipient || !subject || !message) {
+        toast('Please fill all fields', 'error');
+        return;
+      }
+
+      sendBtn.disabled = true;
+      const originalText = sendBtn.textContent;
+      sendBtn.innerHTML = '<span style="display:inline-block;animation:spin 1s linear infinite;">⏳</span> Sending...';
+
+      try {
+        const res = await fetch('/api/send-mail', {
+          method: 'POST',
+          headers: { 'Content-Type': 'application/json' },
+          body: JSON.stringify({ recipientEmail: recipient, subject, message })
+        });
+
+        const data = await res.json();
+
+        if (res.ok && data.success) {
+          toast(data.message || 'Email sent successfully!', 'success');
+          closeModal();
+        } else {
+          toast(data.error || 'Failed to send email. Try again.', 'error');
+        }
+      } catch (err) {
+        console.error('Email send error:', err);
+        toast('Network error. Failed to send email.', 'error');
+      } finally {
+        sendBtn.disabled = false;
+        sendBtn.textContent = originalText;
+      }
+    });
+  }
 }
 
 /* ── CSS for spinner used in verify button ── */

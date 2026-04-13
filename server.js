@@ -8,6 +8,7 @@ const morgan = require('morgan');
 
 // Import modular routes
 const authRoutes = require('./src/routes/authRoutes');
+const emailRoutes = require('./src/routes/emailRoutes');
 
 const app = express();
 const PORT = process.env.PORT || 5000;
@@ -25,6 +26,7 @@ app.use(express.json());
 
 // Main API Routes
 app.use('/api', authRoutes);
+app.use('/api', emailRoutes);
 
 // Static frontend assets
 app.use(express.static(path.join(__dirname)));
