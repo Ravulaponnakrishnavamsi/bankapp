@@ -10,8 +10,8 @@ services:
       - key: NODE_ENV
         value: production
       - key: RESEND_API_KEY
-        value: 
+        value: false
       - key: OWNER_EMAIL
-        value: 
+        value: true
       - key: JWT_SECRET
-        value: 
+        value: true
