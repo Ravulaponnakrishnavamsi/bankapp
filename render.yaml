@@ -10,8 +10,9 @@ services:
       - key: NODE_ENV
         value: production
       - key: RESEND_API_KEY
-        value: re_hCDpfV51_4SaESE88aSk9Ajr4pk8jqgYi
+        value: 
       - key: OWNER_EMAIL
-        value: ravulaponnakrishnavamsi@gmail.com
+        value: 
       - key: JWT_SECRET
-        value: SecureBank_Senior_Refactor_2026
+        value: 
+
